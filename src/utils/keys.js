@@ -1,6 +1,5 @@
+const moment = require('moment');
+
 module.exports = {
-  generateDelayKey: (from, to) => {
-    const now = new Date();
-    return `${from}:${to}:${now.getDate()}/${now.getMonth()+1}:delays`;
-  }
+  generateDelayKey: (from, to) =>  `${from}:${to}:${moment.format('DD/MM/YY')}:delays`
 }

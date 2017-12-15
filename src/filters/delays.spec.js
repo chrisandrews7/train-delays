@@ -17,12 +17,21 @@ describe('Delay Filter', () => {
       {
         std: '11:10',
         etd: '11:20'
+      },
+      {
+        std: '11:50',
+        etd: '12:10'
       }
     ], 1)).to.deep.equal([
       {
         std: '11:10',
         etd: '11:20',
         delay: 10
+      },
+      {
+        std: '11:50',
+        etd: '12:10',
+        delay: 20
       }
     ]);
   });
