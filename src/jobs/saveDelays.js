@@ -1,3 +1,4 @@
+const moment = require('moment');
 const db = require('../utils/db');
 const logger = require('../utils/logger');
 const { generateDelayKey } = require('../utils/keys');
@@ -6,7 +7,7 @@ const { addDelays } = require('../repositories/delays')(db);
 const filterForDelays = require('../filters/delays');
 
 module.exports = async (from, to, threshold) => {
-  const ID = generateDelayKey(from, to);
+  const ID = generateDelayKey(from, to, moment());
 
   const journeys = await getJourneys(from, to);
   const delays = filterForDelays(journeys.trainServices, threshold);
