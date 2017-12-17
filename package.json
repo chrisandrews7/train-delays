@@ -16,6 +16,7 @@
   },
   "scripts": {
     "saveDelays": "node ./src/saveAllJourneyDelays",
+    "getDelays": "node ./src/getAllJourneyDelays",
     "test": "jest",
     "test:watch": "npm t -- --watchAll"
   },
