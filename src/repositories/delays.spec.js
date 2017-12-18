@@ -25,7 +25,7 @@ describe('Delays Repository', () => {
 
       expect(result).to.equal('results!');
       expect(mockDb.expire.calledWithExactly(
-        'testId', 864000
+        'testId', 1209600
       )).to.be.true;
       expect(mockDb.hmset.calledWithExactly(
         'testId',

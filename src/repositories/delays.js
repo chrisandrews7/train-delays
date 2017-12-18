@@ -8,7 +8,7 @@ module.exports = db => ({
     
     return db
       .multi()
-      .expire(journeyId, 864000) // 10 Days
+      .expire(journeyId, 1209600) // 14 Days
       .hmset(journeyId, ...properties);
   },
   getDelays: (journeyId) => db.hgetall(journeyId)
