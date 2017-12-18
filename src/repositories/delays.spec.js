@@ -5,8 +5,10 @@ const repo = require('./delays');
 
 describe('Delays Repository', () => {
   describe('addDelays()', () => {
-    it('should add the delays in a hash using the serviceId as a key', () => {
+    it('should add the delays to a hash using the serviceId as a key', () => {
       const mockDb = {
+        multi: stub().returnsThis(),
+        expire: stub().returnsThis(),
         hmset: stub().returns('results!')
       };
 
@@ -22,6 +24,9 @@ describe('Delays Repository', () => {
       ]);
 
       expect(result).to.equal('results!');
+      expect(mockDb.expire.calledWithExactly(
+        'testId', 864000
+      )).to.be.true;
       expect(mockDb.hmset.calledWithExactly(
         'testId',
         123,

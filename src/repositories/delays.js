@@ -5,7 +5,11 @@ module.exports = db => ({
       collection.push(JSON.stringify(delay));
       return collection;
     }, []);
-    return db.hmset(journeyId, ...properties);
+    
+    return db
+      .multi()
+      .expire(journeyId, 864000) // 10 Days
+      .hmset(journeyId, ...properties);
   },
   getDelays: (journeyId) => db.hgetall(journeyId)
 });
