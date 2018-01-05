@@ -2,7 +2,8 @@ const moment = require('moment');
 const db = require('../utils/db');
 const logger = require('../utils/logger');
 const { generateJourneyKey } = require('../utils/keys');
-const { getDelays } = require('../repositories/delays')(db);
+const { getDelays } = require('../repositories/delay')(db);
+const { getJourneyPairs } = require('../repositories/journey')(db);
 
 const getJourneyDelays = async (from, to) => {
   const ID = generateJourneyKey(from, to);
@@ -12,17 +13,14 @@ const getJourneyDelays = async (from, to) => {
 
 const processAllJourneys = async () => {
   try {
-    const journeyDelays = await Promise.all([
-      getJourneyDelays('WAL', 'WAT'), 
-      getJourneyDelays('WAT', 'WAL')
-    ]);
+    const journeyDelays = await Promise.all(getJourneyPairs().map(pair => getJourneyDelays(pair.from, pair.to)));
     const allDelays = journeyDelays.reduce((collection, delays) => {
       if (delays) {
-        Object.values(delays).forEach((delay => collection.push(delay)));
+        Object.values(delays).forEach((delay => collection.push(JSON.parse(delay))));
       }
       return collection;
     }, []);
-    logger.info(`getDelays: ${allDelays.length} stored delays found`, allDelays);
+    logger.info(`${allDelays.length} stored delays found`, allDelays);
   }
   catch (err) {
     logger.error('getDelays failed', err);

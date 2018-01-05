@@ -2,7 +2,8 @@ const db = require('../utils/db');
 const logger = require('../utils/logger');
 const { generateJourneyKey } = require('../utils/keys');
 const { getJourneys } = require('../apis/darwin');
-const { addDelays } = require('../repositories/delays')(db);
+const { addDelays } = require('../repositories/delay')(db);
+const { getJourneyPairs } = require('../repositories/journey')(db);
 const filterForDelays = require('../filters/delays');
 
 const saveJourneyDelays = async (from, to, threshold) => {
@@ -19,10 +20,7 @@ const saveJourneyDelays = async (from, to, threshold) => {
 
 const processAllJourneys = async () => {
   try {
-    await Promise.all([
-      saveJourneyDelays('WAL', 'WAT', 15), 
-      saveJourneyDelays('WAT', 'WAL', 15)
-    ]);
+    await Promise.all(getJourneyPairs().map(pair => saveJourneyDelays(pair.from, pair.to)));
     logger.info('saveDelays ran successfully');
   }
   catch (err) {

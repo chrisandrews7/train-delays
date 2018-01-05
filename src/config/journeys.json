@@ -1,0 +1,10 @@
+[
+  {
+    "from": "WAL",
+    "to": "WAT"
+  },
+  {
+    "from": "WAT",
+    "to": "WAL"
+  }
+]

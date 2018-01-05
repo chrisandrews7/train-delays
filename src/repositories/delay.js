@@ -10,7 +10,8 @@ module.exports = db => ({
     return db
       .multi()
       .mset(...Object.entries(entries))
-      .sadd(journeyId, ...Object.keys(entries));
+      .sadd(journeyId, ...Object.keys(entries))
+      .exec();
   },
   getDelays: async (journeyId) => {
     const delayIds = await db.smembers(journeyId);

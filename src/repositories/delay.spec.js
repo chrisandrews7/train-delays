@@ -1,15 +1,16 @@
 const { expect } = require('chai');
 const { stub } = require('sinon');
 
-const repo = require('./delays');
+const repo = require('./delay');
 
-describe('Delays Repository', () => {
+describe('Delay Repository', () => {
   describe('addDelays()', () => {
     it('should add the delays to a hash using the serviceId as a key', () => {
       const mockDb = {
         multi: stub().returnsThis(),
+        exec: stub().returns('results!'),
         mset: stub().returnsThis(),
-        sadd: stub().returns('results!')
+        sadd: stub().returnsThis()
       };
 
       const result = repo(mockDb).addDelays('testJourneyId', [
