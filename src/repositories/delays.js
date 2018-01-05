@@ -1,4 +1,4 @@
-const { generateDelayKey, generateJourneyDelaysKey } = require('../utils/keys');
+const { generateDelayKey } = require('../utils/keys');
 
 module.exports = db => ({
   addDelays: (journeyId, delays) => {
