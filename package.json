@@ -15,8 +15,8 @@
     "sinon": "^4.1.3"
   },
   "scripts": {
-    "saveDelays": "node ./src/saveAllJourneyDelays",
-    "getDelays": "node ./src/getAllJourneyDelays",
+    "saveDelays": "node ./src/jobs/saveDelays",
+    "getDelays": "node ./src/jobs/getDelays",
     "test": "jest",
     "test:watch": "npm t -- --watchAll"
   },

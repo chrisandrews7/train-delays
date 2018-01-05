@@ -1,3 +1,4 @@
 module.exports = {
-  generateDelayKey: (from, to, date) =>  `delays:${from}:${to}:${date.format('DD/MM/YY')}`
+  generateDelayKey: serviceId => `delay:${serviceId}`,
+  generateJourneyKey: (from, to) =>  `journey:${from}:${to}`
 }
