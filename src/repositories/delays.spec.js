@@ -8,11 +8,11 @@ describe('Delays Repository', () => {
     it('should add the delays to a hash using the serviceId as a key', () => {
       const mockDb = {
         multi: stub().returnsThis(),
-        expire: stub().returnsThis(),
-        hmset: stub().returns('results!')
+        mset: stub().returnsThis(),
+        sadd: stub().returns('results!')
       };
 
-      const result = repo(mockDb).addDelays('testId', [
+      const result = repo(mockDb).addDelays('testJourneyId', [
         {
           serviceId: 123,
           testing: 'value'
@@ -24,29 +24,44 @@ describe('Delays Repository', () => {
       ]);
 
       expect(result).to.equal('results!');
-      expect(mockDb.expire.calledWithExactly(
-        'testId', 1209600
+
+      expect(mockDb.mset.calledWithExactly(
+        ['delay:123', '{"serviceId":123,"testing":"value"}'],
+        ['delay:456', '{"serviceId":456,"test":"check"}']
       )).to.be.true;
-      expect(mockDb.hmset.calledWithExactly(
-        'testId',
-        123,
-        '{"serviceId":123,"testing":"value"}',
-        456,
-        '{"serviceId":456,"test":"check"}'
+
+      expect(mockDb.sadd.calledWithExactly(
+        'testJourneyId',
+        'delay:123',
+        'delay:456'
       )).to.be.true;
     });
   });
   
   describe('getDelays()', () => {
-    it('should get all the delays for a journey', () => {
+    it('should get all the delays for a journey', async () => {
       const mockDb = {
-        hgetall: stub().returns('results!')
+        smembers: stub().resolves(['delay:1234', 'delay:5678']),
+        mget: stub().returns('results!')
       };
       
-      const result = repo(mockDb).getDelays('testId');
+      const result = await repo(mockDb).getDelays('testJourneyId');
       
       expect(result).to.equal('results!');
-      expect(mockDb.hgetall.calledWithExactly('testId')).to.be.true;
+      expect(mockDb.smembers.calledWithExactly('testJourneyId')).to.be.true;
+      expect(mockDb.mget.calledWithExactly('delay:1234', 'delay:5678')).to.be.true;
+    });
+
+    it('should return an empty array if no delays are found', async () => {
+      const mockDb = {
+        smembers: stub().resolves([]),
+        mget: stub().rejects('error!')
+      };
+      
+      const result = await repo(mockDb).getDelays('testJourneyId');
+      
+      expect(result).to.deep.equal([]);
+      expect(mockDb.mget.notCalled).to.be.true;
     });
   });
 });
