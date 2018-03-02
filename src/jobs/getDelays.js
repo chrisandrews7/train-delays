@@ -11,7 +11,7 @@ const getJourneyDelays = async (from, to) => {
   return delays;
 };
 
-const processAllJourneys = async () => {
+(async () => {
   try {
     const journeyDelays = await Promise.all(getJourneyPairs().map(pair => getJourneyDelays(pair.from, pair.to)));
     const allDelays = journeyDelays.reduce((collection, delays) => {
@@ -28,6 +28,4 @@ const processAllJourneys = async () => {
   finally {
     db.quit();
   }
-};
-
-processAllJourneys();
+})();

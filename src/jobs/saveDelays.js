@@ -18,7 +18,7 @@ const saveJourneyDelays = async (from, to, threshold) => {
   logger.info({ delays }, `${ID} - ${delays.length} valid delay(s) found`);
 };
 
-const processAllJourneys = async () => {
+(async () => {
   try {
     await Promise.all(getJourneyPairs().map(pair => saveJourneyDelays(pair.from, pair.to)));
     logger.info('saveDelays ran successfully');
@@ -29,6 +29,4 @@ const processAllJourneys = async () => {
   finally {
     db.quit();
   }
-};
-
-processAllJourneys();
+})();
