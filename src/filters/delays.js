@@ -8,6 +8,8 @@ module.exports = (services, threshold) =>
       const std = moment(service.std, 'HH:mm');
       service.delay = etd.diff(std, 'minutes') || undefined;
       service.date = moment().format('DD/MM/YY');
+
+      delete service.subsequentCallingPoints;
       return service;
     })
     .filter(service => !service.delay || service.delay > threshold);

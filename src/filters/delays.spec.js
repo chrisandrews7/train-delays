@@ -14,6 +14,16 @@ describe('Delay Filter', () => {
     ])).to.deep.equal([]);
   });
 
+  it('should remove subsequentCallingPoints', () => {
+    expect(filter([
+      {
+        std: '11:10',
+        etd: '11:20',
+        subsequentCallingPoints: 'test',
+      }
+    ], 1)).to.not.have.property('subsequentCallingPoints');
+  });
+
   it('should return the total delay time', () => {
     expect(filter([
       {
@@ -46,14 +56,7 @@ describe('Delay Filter', () => {
         std: '11:10',
         etd: '11:20'
       }
-    ], 1)).to.deep.equal([
-      {
-        std: '11:10',
-        etd: '11:20',
-        delay: 10,
-        date
-      }
-    ]);
+    ], 1)[0].date).to.equal(date);
   });
 
   it('should omit services that arent past the delay threshold', () => {
