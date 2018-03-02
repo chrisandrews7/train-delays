@@ -15,7 +15,7 @@ const saveJourneyDelays = async (from, to, threshold) => {
     await addDelays(ID, delays);
   }
 
-  logger.info(`${ID} - ${delays.length} valid delay(s) found`, delays);
+  logger.info({ delays }, `${ID} - ${delays.length} valid delay(s) found`);
 };
 
 const processAllJourneys = async () => {
@@ -24,7 +24,7 @@ const processAllJourneys = async () => {
     logger.info('saveDelays ran successfully');
   }
   catch (err) {
-    logger.error('saveDelays failed', err);
+    logger.error({ err }, 'saveDelays failed');
   } 
   finally {
     db.quit();

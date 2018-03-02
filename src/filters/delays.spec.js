@@ -1,8 +1,10 @@
 const { expect } = require('chai');
-
+const moment = require('moment');
 const filter = require('./delays');
 
 describe('Delay Filter', () => {
+  const date = moment().format('DD/MM/YY');
+
   it('should omit services that are On Time', () => {
     expect(filter([
       {
@@ -26,12 +28,30 @@ describe('Delay Filter', () => {
       {
         std: '11:10',
         etd: '11:20',
-        delay: 10
+        delay: 10,
+        date
       },
       {
         std: '11:50',
         etd: '12:10',
-        delay: 20
+        delay: 20,
+        date
+      }
+    ]);
+  });
+
+  it('should return the delay date', () => {
+    expect(filter([
+      {
+        std: '11:10',
+        etd: '11:20'
+      }
+    ], 1)).to.deep.equal([
+      {
+        std: '11:10',
+        etd: '11:20',
+        delay: 10,
+        date
       }
     ]);
   });
@@ -50,7 +70,8 @@ describe('Delay Filter', () => {
       {
         std: '11:10',
         etd: '11:22',
-        delay: 12
+        delay: 12,
+        date
       }
     ]);
   });
@@ -69,12 +90,14 @@ describe('Delay Filter', () => {
       {
         std: '11:10',
         etd: 'Cancelled',
-        delay: undefined
+        delay: undefined,
+        date
       },
       {
         std: '11:10',
         etd: 'SomeOtherQuestionableStatus',
-        delay: undefined
+        delay: undefined,
+        date
       }
     ]);
   });

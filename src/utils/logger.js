@@ -1,3 +1,3 @@
-const bunyan = require('bunyan');
-const logger = bunyan.createLogger({ name: 'delays-app' });
+const pino = require('pino');
+const logger = pino();
 module.exports = logger;

@@ -20,10 +20,10 @@ const processAllJourneys = async () => {
       }
       return collection;
     }, []);
-    logger.info(`${allDelays.length} stored delays found`, allDelays);
+    logger.info({ delays: allDelays }, `${allDelays.length} stored delays found`);
   }
   catch (err) {
-    logger.error('getDelays failed', err);
+    logger.error({ err }, 'getDelays failed');
   } 
   finally {
     db.quit();
