@@ -2,7 +2,7 @@
   "delay:12345": "stringified object with delay",
   "delay:6789": "stringified object with delay",
 
-  "journeyDelays:WAL:WAT": [
+  "journey:WAL:WAT": [
     "delay:12345",
     "delay:6789"
   ] 
