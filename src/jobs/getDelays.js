@@ -13,26 +13,33 @@ const getJourneyDelays = async (from, to) => {
   return delays;
 };
 
+
 (async () => {
   try {
     const journeyDelays = await Promise.all(getJourneyPairs().map(pair => getJourneyDelays(pair.from, pair.to)));
     // Merge all journey delays
-    const allDelays = [].concat(...journeyDelays);
-    logger.info({ allDelays }, `${allDelays.length} stored delays found`);
+    const storedDelays = [].concat(...journeyDelays);
+    logger.info({ delays: storedDelays }, `${storedDelays.length} stored delays found`);
 
-    const delays = allDelays.reduce((collection, d) => {
+    const delays = storedDelays.reduce((collection, d) => {
       const delay = JSON.parse(d);
-
       // Group by date
-      if (!collection[d.date]) {
-        collection[d.date] = [];
+      if (!collection[delay.date]) {
+        collection[delay.date] = [];
       }
-      collection[d.date].push(delay);
+      collection[delay.date].push({
+        Scheduled: delay.std,
+        Actual: delay.etd,
+        Operator: delay.operator,
+        ID: delay.serviceId,
+        Origin: delay.origin.name,
+        Destination: delay.destination.name
+      });
       return collection;
     }, {});
     
-    await email(tableify(delays));
-    logger.info({ statusCode, statusMessage }, 'Email request sent');
+    const result = await email(tableify(delays));
+    logger.info({ result }, 'Email client response');
   }
   catch (err) {
     logger.error({ err }, 'getDelays failed');
