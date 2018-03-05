@@ -6,11 +6,13 @@ const { addDelays } = require('../repositories/delay')(db);
 const { getJourneyPairs } = require('../repositories/journey')(db);
 const filterForDelays = require('../filters/delays');
 
-const saveJourneyDelays = async (from, to, threshold) => {
+const DELAY_THRESHOLD = 15;
+
+const saveJourneyDelays = async (from, to) => {
   const ID = generateJourneyKey(from, to);
 
   const journeys = await getJourneys(from, to);
-  const delays = filterForDelays(journeys.trainServices, threshold);
+  const delays = filterForDelays(journeys.trainServices, DELAY_THRESHOLD);
   if (delays.length) {
     await addDelays(ID, delays);
   }
