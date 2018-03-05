@@ -8,6 +8,6 @@ module.exports = {
   getJourneys: (from, to) => promisify(client.getDepartureBoardWithDetails.bind(client))(from, { 
     destination: to,
     rows: 1000,
-    timeOffset: -120
+    timeOffset: -60
   })
 };
