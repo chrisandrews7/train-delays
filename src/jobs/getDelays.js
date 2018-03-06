@@ -13,7 +13,6 @@ const getJourneyDelays = async (from, to) => {
   return delays;
 };
 
-
 (async () => {
   try {
     const journeyDelays = await Promise.all(getJourneyPairs().map(pair => getJourneyDelays(pair.from, pair.to)));
@@ -22,19 +21,22 @@ const getJourneyDelays = async (from, to) => {
     logger.info({ delays: storedDelays }, `${storedDelays.length} stored delays found`);
 
     const delays = storedDelays.reduce((collection, d) => {
-      const delay = JSON.parse(d);
-      // Group by date
-      if (!collection[delay.date]) {
-        collection[delay.date] = [];
+      if (d) {
+        const delay = JSON.parse(d);
+        // Group by date
+        if (!collection[delay.date]) {
+          collection[delay.date] = [];
+        }
+        collection[delay.date].push({
+          Scheduled: delay.std,
+          Actual: delay.etd,
+          Delay: delay.delay,
+          Operator: delay.operatorCode,
+          Origin: delay.origin.name,
+          Destination: delay.destination.name
+        });
       }
-      collection[delay.date].push({
-        Scheduled: delay.std,
-        Actual: delay.etd,
-        Operator: delay.operator,
-        ID: delay.serviceId,
-        Origin: delay.origin.name,
-        Destination: delay.destination.name
-      });
+      
       return collection;
     }, {});
     
