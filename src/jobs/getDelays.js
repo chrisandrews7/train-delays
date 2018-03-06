@@ -25,7 +25,7 @@ const formatDelays = delays => delays.reduce((collection, d) => {
   collection[delay.date].push({
     Scheduled: delay.std,
     Actual: delay.etd,
-    Delay: delay.delay,
+    Delay: `${delay.delay} mins`,
     Operator: delay.operatorCode,
     Origin: delay.origin.name,
     Destination: delay.destination.name
