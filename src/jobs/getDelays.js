@@ -7,41 +7,49 @@ const { getDelays } = require('../repositories/delay')(db);
 const { getJourneyPairs } = require('../repositories/journey')(db);
 const email = require('../utils/email');
 
-const getJourneyDelays = async (from, to) => {
+const getJourneyDelays = (from, to) => {
   const ID = generateJourneyKey(from, to);
-  const delays = await getDelays(ID);
-  return delays;
+  return getDelays(ID);
 };
+
+const formatDelays = delays => delays.reduce((collection, d) => {
+  if (!d) {
+    return collection;
+  }
+
+  const delay = JSON.parse(d);
+  // Group by date
+  if (!collection[delay.date]) {
+    collection[delay.date] = [];
+  }
+  collection[delay.date].push({
+    Scheduled: delay.std,
+    Actual: delay.etd,
+    Delay: delay.delay,
+    Operator: delay.operatorCode,
+    Origin: delay.origin.name,
+    Destination: delay.destination.name
+  });
+  
+  return collection; 
+}, {});
 
 (async () => {
   try {
-    const journeyDelays = await Promise.all(getJourneyPairs().map(pair => getJourneyDelays(pair.from, pair.to)));
-    // Merge all journey delays
-    const storedDelays = [].concat(...journeyDelays);
-    logger.info({ delays: storedDelays }, `${storedDelays.length} stored delays found`);
+    const journeys = getJourneyPairs();
 
-    const delays = storedDelays.reduce((collection, d) => {
-      if (d) {
-        const delay = JSON.parse(d);
-        // Group by date
-        if (!collection[delay.date]) {
-          collection[delay.date] = [];
-        }
-        collection[delay.date].push({
-          Scheduled: delay.std,
-          Actual: delay.etd,
-          Delay: delay.delay,
-          Operator: delay.operatorCode,
-          Origin: delay.origin.name,
-          Destination: delay.destination.name
-        });
-      }
-      
-      return collection;
-    }, {});
+    let html = '';
+
+    await Promise.all(journeys.map(async journey => {
+      const delays = await getJourneyDelays(journey.from, journey.to);
+      logger.info(`${delays.length} ${journey.desc} delays found`);
+
+      html += `<h2>${journey.desc}</h2>`;
+      html += tableify(formatDelays(delays));
+    }));
     
-    const result = await email(tableify(delays));
-    logger.info({ result }, 'Email client response');
+    const { statusCode } = await email(html);
+    logger.info({ statusCode }, 'Email sent');
   }
   catch (err) {
     logger.error({ err }, 'getDelays failed');
