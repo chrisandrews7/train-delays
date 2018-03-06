@@ -17,23 +17,18 @@ Find train delays
 
 ### Adding journeys
 
-A list of journeys to be checked can be found in [src/config/journeys.json](./src/config/journeys.json).
-
+A list of journeys to be checked can be found in [src/config/journeys.json](./src/config/journeys.json).  
 Update to your required journeys to check against. Use [station codes](http://www.nationalrail.co.uk/stations_destinations/48541.aspx).
 
 ### Searching and storing delays
 
 Run ```npm run saveDelays```.
 
-This will query the national rail API for delays and store them against the journey in Redis.
-
-It will only find delays that are over the [DELAY_THRESHOLD](./src/config/app.json), that are 'cancelled' or 'delayed'.
-
-As the national rail API only provides the last 2 hours of data, this needs to be run frequently.
-
-It can be run multiple times and will not duplicate delays as they are stored against their serviceId, so are unique.
-
-An idea of the structure in Redis can be found [here](./src/repositories/structure.json).
+This will query the national rail API for delays and store them against the journey in Redis.  
+It will only find delays that are over the [DELAY_THRESHOLD](./src/config/app.json), that are 'cancelled' or 'delayed'.  
+As the national rail API only provides the last 2 hours of data, this needs to be run frequently.  
+It can be run multiple times and will not duplicate delays as they are stored against their serviceId, so are unique.  
+An idea of the structure in Redis can be found [here](./src/repositories/structure.json).  
 
 ### Retrieve all delays
 
