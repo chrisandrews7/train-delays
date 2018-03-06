@@ -1,10 +1,22 @@
 [
   {
     "from": "WAL",
-    "to": "WAT"
+    "to": "WAT",
+    "desc": "WALTON to WATERLOO"
   },
   {
     "from": "WAT",
-    "to": "WAL"
+    "to": "WAL",
+    "desc": "WATERLOO to WALTON"
+  },
+  {
+    "from": "WIM",
+    "to": "WAL",
+    "desc": "WIMBLEDON to WALTON"
+  },
+  {
+    "from": "WAL",
+    "to": "WIM",
+    "desc": "WALTON to WIMBLEDON"
   }
 ]
