@@ -6,7 +6,7 @@ const { addDelays } = require('../repositories/delay')(db);
 const { getJourneyPairs } = require('../repositories/journey')(db);
 const filterForDelays = require('../filters/delays');
 
-const DELAY_THRESHOLD = 15;
+const { DELAY_THRESHOLD } = require('../config/app');
 
 const saveJourneyDelays = async (from, to) => {
   const ID = generateJourneyKey(from, to);
