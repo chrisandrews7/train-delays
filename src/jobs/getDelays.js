@@ -25,7 +25,7 @@ const formatDelays = delays => delays.reduce((collection, d) => {
   collection[delay.date].push({
     Scheduled: delay.std,
     Actual: delay.etd,
-    Delay: `${delay.delay} mins`,
+    Delay: delay.delay,
     Operator: delay.operatorCode,
     Origin: delay.origin.name,
     Destination: delay.destination.name
@@ -44,8 +44,10 @@ const formatDelays = delays => delays.reduce((collection, d) => {
       const delays = await getJourneyDelays(journey.from, journey.to);
       logger.info(`${delays.length} ${journey.desc} delays found`);
 
-      html += `<h2>${journey.desc}</h2>`;
-      html += tableify(formatDelays(delays));
+      if (delays && delays.length) {
+        html += `<h2>${journey.desc}</h2>`;
+        html += tableify(formatDelays(delays));
+      }
     }));
     
     const { statusCode } = await email(html);
