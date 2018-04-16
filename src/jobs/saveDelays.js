@@ -17,7 +17,7 @@ const saveJourneyDelays = async (from, to) => {
     await addDelays(ID, delays);
   }
 
-  logger.info({ delays }, `${ID} - ${delays.length} valid delay(s) found`);
+  logger.info(`${ID} - ${delays.length} valid delay(s) found`);
 };
 
 (async () => {

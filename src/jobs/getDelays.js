@@ -14,6 +14,7 @@ const getJourneyDelays = (from, to) => {
 
 const formatDelays = delays => delays.reduce((collection, d) => {
   if (!d) {
+    logger.warn('Disjointed record found');
     return collection;
   }
 
@@ -36,6 +37,12 @@ const formatDelays = delays => delays.reduce((collection, d) => {
 
 (async () => {
   try {
+    if(moment().day() !== 5) {
+      // Only run on a friday
+      logger.info('Its not friday yet!');
+      return;
+    }
+
     const journeys = getJourneyPairs();
 
     let html = '';

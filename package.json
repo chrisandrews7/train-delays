@@ -6,10 +6,10 @@
     "@sendgrid/mail": "^6.2.1",
     "dotenv": "^5.0.1",
     "enviro-conf": "^0.3.1",
+    "ioredis": "^3.2.2",
     "moment": "^2.19.4",
     "national-rail-darwin": "^1.0.3",
     "pino": "^4.13.0",
-    "promise-redis": "0.0.5",
     "tableify": "^1.1.0"
   },
   "devDependencies": {
